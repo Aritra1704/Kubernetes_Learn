@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+#  If not to be created in default namespace, define namespace
+  namespace: dev
+  labels:
+    app: myapp
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+      ports:
+        - containerPort: 8080
+# To declare env variable
+#      env:
+#        - name: APP_COLOR
+#          value: pink
+# To declare env from configMaps
+#      envFrom:
+#        - configMapRef:
+#            name: app-config
+# Single env
+#      env:
+#        - name: APP_COLOR
+#          valueFrom:
+#            configMapKeyRef:
+#              name: app-config
+#              key: APP_COLOR
+# Volume
+#      volumes:
+#        - name: app-config-volume
+#          configMap:
+#            name: app-config
+
+# Secret
+#      envFrom:
+#        - secretRef:
+#            name: app-secret
+# Single env from Secret
+#      env:
+#        - name: DB_PASSWORD
+#          valueFrom:
+#            secretKeyRef:
+#              name: app-secret
+#              key: DB_PASSWORD
+# Secret Volume
+      volumes:
+        - name: app-secret-volume
+          secret:
+            secretName: app-secret
