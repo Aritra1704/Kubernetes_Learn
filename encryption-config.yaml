@@ -1,0 +1,11 @@
+apiVersion: apiserver.config.k8s.io/v1
+kind: ErcyptionConfiguration
+resources:
+  - resources:
+      - secrets
+    providers:
+      -aes-cbc:
+        keys:
+          - name: key1
+            secret: <base 64 encoded secret>
+      - identity: {}
