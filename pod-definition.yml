@@ -7,11 +7,29 @@ metadata:
   labels:
     app: myapp
 spec:
+#  If default service account not to be used
+  serviceAccountName: dashboard-sa
+#  To not allow a mount a service account automatically
+  automountServiceAccountToken: false
   containers:
     - name: nginx-container
       image: nginx
       ports:
         - containerPort: 8080
+#   Setting up toleration
+      tolerations:
+        - key: "app"
+          operator: "Equal"
+          value: "blue"
+          effect: "NoSchedule"
+#     If non default resources are required
+#      resources:
+#        requests:
+#          memory: "1Gi"
+#          cpu: 1
+#        limits:
+#          memory: "2Gi"
+#          cpu: 2
 # To declare env variable
 #      env:
 #        - name: APP_COLOR
@@ -45,7 +63,7 @@ spec:
 #              name: app-secret
 #              key: DB_PASSWORD
 # Secret Volume
-      volumes:
-        - name: app-secret-volume
-          secret:
-            secretName: app-secret
+#      volumes:
+#        - name: app-secret-volume
+#          secret:
+#            secretName: app-secret
