@@ -11,17 +11,75 @@ spec:
   serviceAccountName: dashboard-sa
 #  To not allow a mount a service account automatically
   automountServiceAccountToken: false
+#  Executes these containers first and these need to finish to start the actual containers
+  initContainers:
+    - name: init-myservice
+      image: busybox
   containers:
     - name: nginx-container
       image: nginx
       ports:
         - containerPort: 8080
+#     Setup readiness probe to verify if pod is actually ready
+      readinessProbe:
+#        For http use this backend application
+        httpGet:
+          path: /api/ready
+          port: 8080
+#        For tcp use tcpSocket Eg: db server
+        tcpSocket:
+          port: 3306
+#       Custom script
+        exec:
+          command:
+            - cat
+            - /app/is_ready
+#       To setup some initial delay in verification
+        initialDelaySeconds: 10
+#       To setup delay in period to verify if pod is up
+        periodSeconds: 5
+#       If default delay of 3 needs to be updated
+        failureThreshold: 8
+#     Setup liveness probe to verify if pod is actually ready
+        livenessProbe:
+#        For http use this backend application
+          httpGet:
+            path: /api/healthy
+            port: 8080
+#        For tcp use tcpSocket Eg: db server
+          tcpSocket:
+            port: 3306
+#       Custom script
+          exec:
+            command:
+              - cat
+              - /app/is_healthy
+#       To setup some initial delay in verification
+          initialDelaySeconds: 10
+#       To setup delay in period to verify if pod is working
+          periodSeconds: 5
+#       If default delay of 3 needs to be updated
+          failureThreshold: 8
+# Setup nodeaffinity
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: size
+                operator: In
+                values:
+                  - Large
+                  - Medium
+# Setup nodeselector
+  nodeSelectors:
+    size: Large
 #   Setting up toleration
-      tolerations:
-        - key: "app"
-          operator: "Equal"
-          value: "blue"
-          effect: "NoSchedule"
+  tolerations:
+    - key: app
+      operator: Equal
+      value: blue
+      effect: NoSchedule
 #     If non default resources are required
 #      resources:
 #        requests:
