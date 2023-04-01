@@ -2,9 +2,6 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: math-add-job
-  labels:
-    app: myapp
-    type: front-end
 spec:
 #  To set number of pods a job can use
   completions: 3
