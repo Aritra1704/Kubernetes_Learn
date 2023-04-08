@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-policy
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+#  To set rules mention the policy types, if Egress is not mentioned then no rules on Egress
+  policyTypes:
+    - Ingress
+# If policy type set as Ingress, then Ingress needs to be configured
+  ingress:
+    - from:
+#      Specifies which application pods can access this pod
+      - podSelector:
+          matchLabels:
+            name: api-pod
+#       Specifies which namesapce pods can access this pod
+#        THIS IS LIKE AN AND OPERATION
+        namespaceSelector:
+          matchLabels:
+            name: prod
+#     If any outside application like Backup server needs to connect to this application, then
+#      that outside application ip can be configured
+#        THIS IS LIKE AN OR OPERATION
+      - ipBlock:
+          cicdr: 192.168.5.10/32
+      ports:
+        - protocol: TCP
+          port: 3306
+  egress:
+    - to:
+        - ipBlock:
+            cicdr: 192.168.5.10/32
+          ports:
+          - protocol: TCP
+            port: 80
