@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  generation: 1
+  name: internal-policy
+  namespace: default
+  resourceVersion: "3617"
+  uid: 375972f7-9425-43b0-b990-0bb3005ec110
+spec:
+#  Multiple egress network
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          name: payroll
+    ports:
+    - port: 8080
+      protocol: TCP
+  - to:
+    - podSelector:
+        matchLabels:
+          name: mysql
+    ports:
+      - port: 3306
+        protocol: TCP
+  podSelector:
+    matchLabels:
+      name: internal
+  policyTypes:
+  - Egress
