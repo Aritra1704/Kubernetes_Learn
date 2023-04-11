@@ -44,25 +44,35 @@ spec:
 #       If default delay of 3 needs to be updated
         failureThreshold: 8
 #     Setup liveness probe to verify if pod is actually ready
-        livenessProbe:
+      livenessProbe:
 #        For http use this backend application
-          httpGet:
-            path: /api/healthy
-            port: 8080
+        httpGet:
+          path: /api/healthy
+          port: 8080
 #        For tcp use tcpSocket Eg: db server
-          tcpSocket:
-            port: 3306
+        tcpSocket:
+          port: 3306
 #       Custom script
-          exec:
-            command:
-              - cat
-              - /app/is_healthy
+        exec:
+          command:
+            - cat
+            - /app/is_healthy
 #       To setup some initial delay in verification
-          initialDelaySeconds: 10
+        initialDelaySeconds: 10
 #       To setup delay in period to verify if pod is working
-          periodSeconds: 5
+        periodSeconds: 5
 #       If default delay of 3 needs to be updated
-          failureThreshold: 8
+        failureThreshold: 8
+#     Setup volume mount paths in the node
+      volumeMounts:
+        - mountPath: /opt
+          name: data-volume
+# Setup data volumes
+  volumes:
+    - name: data-volume
+      hostPath:
+        path: /data
+        type: Directory
 # Setup nodeaffinity
   affinity:
     nodeAffinity:

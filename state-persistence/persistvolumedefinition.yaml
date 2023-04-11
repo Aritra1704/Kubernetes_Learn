@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vol1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+# Supported storage solutions in PROD
+  awsElasticBlockStore:
+    volumeID: <volume-id>
+    fsType: ext4
+# Storage from host local directory
+#  hostPath:
+#    path: /tmp/data
