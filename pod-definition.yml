@@ -73,6 +73,10 @@ spec:
       hostPath:
         path: /data
         type: Directory
+#   Setup persistent volume claim in pod
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: myclaim
 # Setup nodeaffinity
   affinity:
     nodeAffinity:
