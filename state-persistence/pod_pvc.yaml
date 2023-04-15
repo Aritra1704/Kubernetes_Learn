@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: pod
+  name: nginx
+spec:
+  volumes:
+    - name: local-pvc
+      persistentVolumeClaim:
+        claimName: local-pvc
+  containers:
+  - args:
+    - nginx
+    image: nginx:alpine
+    name: pod
+    resources: {}
+    volumeMounts:
+      - mountPath: /var/www/html
+        name: local-pvc
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
