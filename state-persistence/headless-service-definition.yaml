@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-h
+spec:
+#  Mandatory to create a headless service
+  type: None
+  ports:
+#      Mandatory
+      port: 3306
+  selectors:
+#    Pod lables
+    app: mysql

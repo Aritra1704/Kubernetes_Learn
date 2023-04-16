@@ -22,4 +22,4 @@ spec:
       app: mysql
   serviceName: mysql-h
 #  If ordered set is not required
-  podManagementPolicy: Parallel
+#  podManagementPolicy: Parallel
