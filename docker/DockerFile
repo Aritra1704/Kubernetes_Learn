@@ -1,0 +1,17 @@
+# Declaring OS
+FROM Ubuntu
+
+# Update app repo
+RUN apt-get update
+# Install dependencies using apt
+RUN api-get install python
+
+# Install python dependencies using pip
+RUN pip install flask
+PUN pip install flask-mysql
+
+# Copy source code to /opt folder
+COPY . /opt/source-code
+
+# Run the web server using "flask" command
+ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run
